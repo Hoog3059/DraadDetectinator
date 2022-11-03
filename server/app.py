@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = 'My super secret secret'
 
 DATABASE = os.path.join(os.getcwd(), 'database.db')
 
-socketio = sio.SocketIO(app, cors_allowed_origins=['http://localhost:8080', 'http://192.168.2.31:8080', 'https://hoog3059.pythonanywhere.com'])
+socketio = sio.SocketIO(app, cors_allowed_origins=['http://localhost:8080', 'http://192.168.2.31:8080', 'https://hoog3059.pythonanywhere.com', 'http://hoog3059.pythonanywhere.com'])
 
 
 @app.get('/api')
