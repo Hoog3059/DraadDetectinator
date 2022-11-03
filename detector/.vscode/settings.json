@@ -1,0 +1,31 @@
+{
+    "extensions.ignoreRecommendations": true,
+    "C_Cpp.default.configurationProvider": "particle.particle-vscode-core",
+    "files.associations": {
+        "*.ino": "cpp",
+        "algorithm": "cpp",
+        "chrono": "cpp",
+        "forward_list": "cpp",
+        "map": "cpp",
+        "memory": "cpp",
+        "optional": "cpp",
+        "ostream": "cpp",
+        "ratio": "cpp",
+        "sstream": "cpp",
+        "system_error": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "vector": "cpp",
+        "xlocmon": "cpp",
+        "xmemory": "cpp",
+        "xstring": "cpp",
+        "xtr1common": "cpp",
+        "xtree": "cpp",
+        "xutility": "cpp",
+        "new": "cpp"
+    },
+    "particle.firmwareVersion": "3.3.0",
+    "particle.targetPlatform": "photon",
+    "particle.targetDevice": "DraadDetectinator"
+}

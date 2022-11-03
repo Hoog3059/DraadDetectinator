@@ -1,0 +1,10 @@
+name: DraadDetectinator
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - flask
+  - flask-socketio
+  - nodejs
+  - autopep8
+prefix: C:\Users\timoh\miniconda3\envs\DraadDetectinator
