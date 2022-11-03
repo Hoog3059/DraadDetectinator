@@ -101,7 +101,7 @@ export default {
         }
     },
     created() {
-        this.socket = io("http://127.0.0.1:5000/");
+        this.socket = io(process.env.VUE_APP_SOCKETIO_SERVER);
 
     },
     mounted() {
