@@ -29,9 +29,10 @@
 #include "LiquidCrystal_I2C_Spark.h"
 
 #include "main.h"
+#include "calibration.h"
 
 // ################
-// # System modes # 
+// # System modes #
 // ################
 SYSTEM_MODE(MANUAL);    // Turn off automatic network setup.
 SYSTEM_THREAD(ENABLED); // Recommended by manual.
@@ -213,7 +214,7 @@ void positionModeRoutine(Mode *currentMode)
         selectedMode = getModeSwitchState();
         activatedSwitches = determineActivatedSwitches();
 
-        delay(500);
+        delay(400);
     }
 
     *currentMode = selectedMode;
@@ -258,28 +259,39 @@ void depthModeRoutine(Mode *currentMode)
         float peakWidth = 0;
         doMeasurement(voltageArray, &loopTime, &Vmax, &Vmin, &Vptp, &peakWidth);
 
-        // The following things require calibration to be completed.
-        // TODO: Determine range from activated switches.
-        // TODO: Determine depth from Vptp, Vmax and peakWidth.
+        // Check if switch configuration is valid.
+        bool invalidSwitchConfiguration = !checkForValidCalibrationSwitchConfiguration(activatedSwitches);
 
-        int rangeMin = 0;
-        int rangeMax = 0;
-        bool rangeTooHigh = false;
-        bool rangeTooLow = false;
-        int depthBestGuess = 0;
+        int switchIndex = getIndexByConfiguration(activatedSwitches);
+
+        float domainMax = confDomainMax[switchIndex];
+        float domainMin = confDomainMin[switchIndex];
+        int rangeMax = round(getDepthByFit(activatedSwitches, domainMin));
+        int rangeMin = round(getDepthByFit(activatedSwitches, domainMax));        
+
+        bool domainTooHigh = Vptp >= domainMax;
+        bool domainTooLow = Vptp <= domainMin;
+
+        int depthBestGuess = getDepthByFit(activatedSwitches, Vptp);
+
+        lcd_clear();
 
         bool printFirstLCDLine = true;
-        if (rangeTooHigh)
+        if (invalidSwitchConfiguration)
         {
-            lcdFirstLine = String::format("Depth < %d cm", rangeMin);
+            lcdFirstLine = "Invalid switches";
         }
-        else if (rangeTooLow)
+        else if (domainTooHigh)
         {
-            lcdFirstLine = String::format("Depth > %d cm", rangeMax);
+            lcdFirstLine = String::format("Depth <= %d cm", rangeMin);
+        }
+        else if (domainTooLow)
+        {
+            lcdFirstLine = String::format("Depth >= %d cm", rangeMax);
         }
         else
         {
-            lcdFirstLine = String::format("Depth \\approx %d cm", rangeMax);
+            lcdFirstLine = String::format("Depth \\approx %d cm", depthBestGuess);
             printFirstLCDLine = false;
 
             // Prints ``Depth ≈ %d cm`` to the LCD.
@@ -297,7 +309,7 @@ void depthModeRoutine(Mode *currentMode)
         selectedMode = getModeSwitchState();
         activatedSwitches = determineActivatedSwitches();
 
-        delay(500);
+        delay(400);
     }
 
     *currentMode = selectedMode;
@@ -543,12 +555,12 @@ void runDischargeCycle()
     pinMode(DISCHARGE_PIN, INPUT_PULLDOWN);
 
     // Delay to allow capacitors to discharge.
-    delay(10);
+    delay(50);
 
     // Return pin to high-impedance state.
     pinMode(DISCHARGE_PIN, INPUT);
 
-    delay(100);
+    delay(50);
 #endif
 }
 

@@ -1,6 +1,9 @@
 // setup.h contains sensitive information, therefore it is not uploaded to the repository.
 // This file provides a template of what setup.h should look like.
 
+#ifndef _SETUP_H_
+#define _SETUP_H_
+
 // ########################
 // # Debug or production? #
 // ########################
@@ -34,4 +37,5 @@
 // Port of the API server.
 #define SETUP_SERVER_PORT 80
 
+#endif
 #endif

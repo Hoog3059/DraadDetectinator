@@ -1,3 +1,6 @@
+#ifndef _MAIN_H_
+#define _MAIN_H_
+
 #include "setup.h"
 
 // ############
@@ -150,3 +153,4 @@ void lcd_print(String text);
 /// It does nothing when the `NO_LCD` flag is defined.
 /// @param byte is the byte to write to the LCD.
 void lcd_write(uint8_t byte);
+#endif
